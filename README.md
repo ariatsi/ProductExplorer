@@ -1,4 +1,4 @@
-# Product Explorer - TP4 final
+# Product Explorer - TP4 code final
 
 Code final indicatif du **TP4 - Ecran de detail produit**.
 

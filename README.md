@@ -1,70 +1,96 @@
-# Product Explorer - TP5 final
+# Product Explorer - TP6 final
 
-Code final indicatif apres evolution **TP4 -> TP5**.
+Code final indicatif apres evolution **TP5 -> TP6**.
 
 ## Evolution du projet
 
-- **TP4** : creation de l'ecran de detail produit.
-- **TP5** : ajout d'un ecran d'accueil `ProductHomeScreen`.
-- L'ecran detail reste dans le code, mais l'application affiche maintenant l'accueil au lancement.
+- **TP4** : ecran de detail produit.
+- **TP5** : ecran d'accueil `ProductHomeScreen`.
+- **TP6** : ajout d'un catalogue local avec `ProductCatalogScreen`.
+- Les ecrans precedents restent dans le code, mais l'application affiche maintenant le catalogue au lancement.
 
-## Ce que fait le TP5
+## Ce que fait le TP6
 
-L'ecran d'accueil contient :
+L'ecran catalogue contient :
 
-- un en-tete ;
-- une fausse zone de recherche ;
-- un produit mis en avant ;
-- des categories ;
-- une offre du jour avec badge ;
+- un titre ;
+- une courte description ;
+- une ligne horizontale de categories ;
+- une liste verticale de produits ;
+- une carte reutilisable pour chaque produit ;
 - un bouton "Voir le produit" sans vraie navigation pour l'instant.
 
 Les donnees restent locales.
 
 ## Notions utilisees
 
-- `Column`
-- `Row`
-- `Box`
-- `Spacer`
-- `Surface`
-- `Button`
-- `Modifier`
+- `LazyColumn`
+- `LazyRow`
+- `items`
+- `item`
+- `PaddingValues`
+- `Arrangement`
+- donnees locales Kotlin
+- carte produit reutilisable
 - callbacks
 - `@Preview`
 
-## Composables principaux
+## Composables / fonctions principaux
 
+- `ProductCatalogScreen`
+- `ProductListItem`
+- `CategoryRow`
+- `sampleProducts()`
+- `sampleCategories()`
+- `ProductCatalogScreenPreview`
+
+Elements deja presents depuis les TP precedents :
+
+- `ProductUi`
+- `sampleProduct()`
 - `ProductHomeScreen`
-- `HomeHeader`
-- `SearchPreviewBar`
-- `FeaturedProductSection`
-- `ProductQuickInfoRow`
-- `CategoryChip`
-- `CategoriesSection`
-- `DailyOfferBox`
-- `ProductHomeScreenPreview`
-
-Les composables du TP4 restent disponibles, notamment :
-
 - `ProductDetailScreen`
-- `ProductHeader`
-- `ProductPriceCard`
-- `ProductRating`
-- `ProductAvailabilityCard`
+- `CategoryChip`
+
+## Changement important
+
+`ProductUi` possede maintenant un identifiant :
+
+```kotlin
+val id: Int
+```
+
+Il est utilise comme cle stable dans la liste :
+
+```kotlin
+items(
+    items = products,
+    key = { product -> product.id }
+)
+```
 
 ## Point d'entree
 
 Dans `MainActivity`, l'application affiche maintenant :
 
 ```kotlin
-ProductHomeScreen(
-    featuredProduct = sampleProduct(),
-    onFeaturedProductClick = {
+ProductCatalogScreen(
+    products = sampleProducts(),
+    onProductClick = {
         // Plus tard : ouvrir le detail du produit
     },
     modifier = Modifier.padding(innerPadding)
 )
+```
+
+## Imports utiles
+
+```kotlin
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 ```
 
 ## Telecharger une version precise
@@ -86,5 +112,5 @@ Pour telecharger une version sans cloner le depot :
 Pour le code final de ce TP, choisir :
 
 ```text
-tp5-final
+tp6-final
 ```

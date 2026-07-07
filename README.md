@@ -1,63 +1,73 @@
-# Product Explorer - TP4 code final
+# Product Explorer - TP5 final
 
-Code final indicatif du **TP4 - Ecran de detail produit**.
+Code final indicatif apres evolution **TP4 -> TP5**.
 
-L'application affiche un produit avec ses informations principales : image, titre, marque, categorie, prix, remise, note, stock, livraison, description, garantie et bouton d'action.
+## Evolution du projet
 
-## Notions vues
+- **TP4** : creation de l'ecran de detail produit.
+- **TP5** : ajout d'un ecran d'accueil `ProductHomeScreen`.
+- L'ecran detail reste dans le code, mais l'application affiche maintenant l'accueil au lancement.
 
-- `Text`, `Button`, `Icon`, `Image`
-- `Card`, `OutlinedTextField`
-- `Column`, `Row`, `Scaffold`
+## Ce que fait le TP5
+
+L'ecran d'accueil contient :
+
+- un en-tete ;
+- une fausse zone de recherche ;
+- un produit mis en avant ;
+- des categories ;
+- une offre du jour avec badge ;
+- un bouton "Voir le produit" sans vraie navigation pour l'instant.
+
+Les donnees restent locales.
+
+## Notions utilisees
+
+- `Column`
+- `Row`
+- `Box`
+- `Spacer`
+- `Surface`
+- `Button`
 - `Modifier`
-- `@Preview`
 - callbacks
-- `contentDescription`
+- `@Preview`
 
-## Fichier principal
+## Composables principaux
 
-```text
-app/src/main/java/com/example/productexplorer/MainActivity.kt
-```
+- `ProductHomeScreen`
+- `HomeHeader`
+- `SearchPreviewBar`
+- `FeaturedProductSection`
+- `ProductQuickInfoRow`
+- `CategoryChip`
+- `CategoriesSection`
+- `DailyOfferBox`
+- `ProductHomeScreenPreview`
 
-Le code est decoupe en plusieurs composables, par exemple :
+Les composables du TP4 restent disponibles, notamment :
 
 - `ProductDetailScreen`
 - `ProductHeader`
 - `ProductPriceCard`
 - `ProductRating`
 - `ProductAvailabilityCard`
-- `ProductDescription`
-- `ProductWarrantyField`
-- `AddToCartButton`
 
-## Icônes Material
+## Point d'entree
 
-Pour utiliser `Icons.Default.Star`, il faut ajouter la dependance des icones Material.
-
-Dans `app/build.gradle.kts` :
+Dans `MainActivity`, l'application affiche maintenant :
 
 ```kotlin
-implementation("androidx.compose.material:material-icons-extended")
+ProductHomeScreen(
+    featuredProduct = sampleProduct(),
+    onFeaturedProductClick = {
+        // Plus tard : ouvrir le detail du produit
+    },
+    modifier = Modifier.padding(innerPadding)
+)
 ```
 
-Ou avec le Version Catalog, dans `gradle/libs.versions.toml` :
-
-```toml
-androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
-```
-
-Puis dans `app/build.gradle.kts` :
-
-```kotlin
-implementation(libs.androidx.compose.material.icons.extended)
-```
-
-Comme le projet utilise le Compose BOM, il n'est generalement pas necessaire de preciser une version.
-
-Apres modification : cliquer sur **Sync Now**.
-
-## Télécharger une version précise
+## Telecharger une version precise
 
 Chaque fin de TP est disponible avec un tag Git :
 
@@ -76,5 +86,5 @@ Pour telecharger une version sans cloner le depot :
 Pour le code final de ce TP, choisir :
 
 ```text
-tp4-final
+tp5-final
 ```

@@ -1,73 +1,84 @@
-# Product Explorer - TP7 final
+# Product Explorer - TP8 final
 
-Code final indicatif apres evolution **TP6 -> TP7**.
+Code final indicatif apres evolution **TP7 -> TP8**.
 
 ## Evolution du projet
 
 - **TP4** : ecran de detail produit.
 - **TP5** : ecran d'accueil.
-- **TP6** : catalogue local avec `LazyColumn` et `LazyRow`.
-- **TP7** : personnalisation graphique avec Material Design 3.
+- **TP6** : catalogue local avec listes modernes.
+- **TP7** : personnalisation Material Design 3.
+- **TP8** : catalogue interactif avec etats Compose.
 
-## Ce que fait le TP7
+## Ce que fait le TP8
 
-Le projet garde le catalogue du TP6, mais ameliore son apparence avec le theme Compose.
+Le catalogue devient interactif localement :
 
-On personnalise :
+- recherche de produits ;
+- filtrage par titre, marque ou categorie ;
+- filtre "produits en stock uniquement" ;
+- ajout / retrait de favoris ;
+- mise a jour automatique de l'interface.
 
-- les couleurs avec `ColorScheme` ;
-- les textes avec `Typography` ;
-- les formes avec `Shapes` ;
-- le theme clair ;
-- le theme sombre.
-
-## Fichiers principaux
-
-- `MainActivity.kt`
-- `ui/theme/Theme.kt`
-- `ui/theme/Type.kt`
-
-Selon votre projet, les noms exacts peuvent varier.
+Les donnees restent locales.
 
 ## Notions utilisees
 
-- `MaterialTheme`
-- `MaterialTheme.colorScheme`
-- `MaterialTheme.typography`
-- `MaterialTheme.shapes`
-- `lightColorScheme`
-- `darkColorScheme`
-- `Shapes`
-- `Typography`
-- previews claire et sombre
+- `mutableStateOf`
+- `remember`
+- `rememberSaveable`
+- `OutlinedTextField`
+- filtre local
+- favoris locaux
+- recomposition Compose
+
+## Composables modifies
+
+- `ProductCatalogScreen`
+- `ProductListItem`
 
 ## Changements principaux
 
-Le theme centralise maintenant l'apparence de l'application :
+Etat de recherche :
 
 ```kotlin
-MaterialTheme(
-    colorScheme = colorScheme,
-    typography = ProductTypography,
-    shapes = ProductShapes,
-    content = content
-)
+var searchQuery by rememberSaveable {
+    mutableStateOf("")
+}
 ```
 
-Les composants utilisent le theme au lieu de couleurs ou formes fixes :
+Filtrage des produits :
 
 ```kotlin
-color = MaterialTheme.colorScheme.primary
-shape = MaterialTheme.shapes.large
-style = MaterialTheme.typography.titleLarge
+val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
+    products.filter { product ->
+        val matchesSearch =
+            product.title.contains(searchQuery, ignoreCase = true) ||
+            product.brand.contains(searchQuery, ignoreCase = true) ||
+            product.category.contains(searchQuery, ignoreCase = true)
+
+        val matchesStock = !showOnlyInStock || product.stock > 0
+
+        matchesSearch && matchesStock
+    }
+}
 ```
 
-## Previews
+Favoris locaux :
 
-Le TP ajoute deux previews pour comparer le rendu :
+```kotlin
+var favoriteProductIds by rememberSaveable {
+    mutableStateOf(listOf<Int>())
+}
+```
 
-- `ProductCatalogScreenLightPreview`
-- `ProductCatalogScreenDarkPreview`
+## A tester
+
+- rechercher un produit ;
+- filtrer les produits en stock ;
+- ajouter un favori ;
+- retirer un favori ;
+- tourner l'ecran pour verifier `rememberSaveable`.
 
 ## Telecharger une version precise
 
@@ -77,6 +88,7 @@ Chaque fin de TP est disponible avec un tag Git :
 - `tp5-final`
 - `tp6-final`
 - `tp7-final`
+- `tp8-final`
 
 Pour telecharger une version sans cloner le depot :
 
@@ -88,5 +100,5 @@ Pour telecharger une version sans cloner le depot :
 Pour le code final de ce TP, choisir :
 
 ```text
-tp7-final
+tp8-final
 ```

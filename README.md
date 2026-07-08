@@ -1,6 +1,6 @@
-# Product Explorer - TP8 final
+# Product Explorer - TP9 final
 
-Code final indicatif apres evolution **TP7 -> TP8**.
+Code final indicatif apres evolution **TP8 -> TP9**.
 
 ## Evolution du projet
 
@@ -9,76 +9,103 @@ Code final indicatif apres evolution **TP7 -> TP8**.
 - **TP6** : catalogue local avec listes modernes.
 - **TP7** : personnalisation Material Design 3.
 - **TP8** : catalogue interactif avec etats Compose.
+- **TP9** : refactor avec **State Hoisting**.
 
-## Ce que fait le TP8
+## Ce que fait le TP9
 
-Le catalogue devient interactif localement :
+Le comportement reste le meme que dans le TP8 :
 
 - recherche de produits ;
-- filtrage par titre, marque ou categorie ;
-- filtre "produits en stock uniquement" ;
-- ajout / retrait de favoris ;
+- filtre "produits en stock" ;
+- favoris locaux ;
 - mise a jour automatique de l'interface.
 
-Les donnees restent locales.
+La difference principale est l'organisation du code.
 
 ## Notions utilisees
 
-- `mutableStateOf`
-- `remember`
+- State Hoisting
+- composable stateful
+- composable stateless
+- valeurs descendantes
+- evenements remontants
+- callbacks
 - `rememberSaveable`
-- `OutlinedTextField`
-- filtre local
-- favoris locaux
-- recomposition Compose
+- `remember`
+- `mutableStateOf`
 
-## Composables modifies
+## Nouveaux roles des composables
 
-- `ProductCatalogScreen`
-- `ProductListItem`
+`ProductCatalogContainer` devient le composable **stateful** :
 
-## Changements principaux
+- possede `searchQuery` ;
+- possede `showOnlyInStock` ;
+- possede `favoriteProductIds` ;
+- calcule `filteredProducts` ;
+- contient `toggleFavorite()`.
 
-Etat de recherche :
+`ProductCatalogScreen` devient le composable **stateless** :
+
+- recoit les valeurs a afficher ;
+- recoit les callbacks ;
+- affiche la `LazyColumn` ;
+- ne contient plus de `remember`.
+
+`ProductListItem` reste aussi **stateless** :
+
+- recoit `isFavorite` ;
+- recoit `onFavoriteClick` ;
+- recoit `onClick`.
+
+## Point d'entree
+
+Dans `MainActivity`, l'application appelle maintenant :
 
 ```kotlin
-var searchQuery by rememberSaveable {
-    mutableStateOf("")
-}
+ProductCatalogContainer(
+    products = sampleProducts(),
+    categories = sampleCategories(),
+    onProductClick = {
+        // Plus tard : ouvrir le detail du produit
+    },
+    modifier = Modifier.padding(innerPadding)
+)
 ```
 
-Filtrage des produits :
+## Principe important
 
-```kotlin
-val filteredProducts = remember(products, searchQuery, showOnlyInStock) {
-    products.filter { product ->
-        val matchesSearch =
-            product.title.contains(searchQuery, ignoreCase = true) ||
-            product.brand.contains(searchQuery, ignoreCase = true) ||
-            product.category.contains(searchQuery, ignoreCase = true)
-
-        val matchesStock = !showOnlyInStock || product.stock > 0
-
-        matchesSearch && matchesStock
-    }
-}
+```text
+Les donnees descendent.
+Les evenements remontent.
 ```
 
-Favoris locaux :
+## Previews
+
+Les previews du catalogue doivent maintenant appeler plutot :
+
+- `ProductCatalogContainerLightPreview`
+- `ProductCatalogContainerDarkPreview`
+
+Une preview stateless peut aussi etre gardee pour tester `ProductCatalogScreen` avec des valeurs fournies directement.
+
+## Imports utiles
 
 ```kotlin
-var favoriteProductIds by rememberSaveable {
-    mutableStateOf(listOf<Int>())
-}
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.foundation.lazy.items
 ```
 
 ## A tester
 
-- rechercher un produit ;
-- filtrer les produits en stock ;
-- ajouter un favori ;
-- retirer un favori ;
-- tourner l'ecran pour verifier `rememberSaveable`.
+- saisir un texte de recherche ;
+- activer / desactiver le filtre stock ;
+- ajouter / retirer un favori ;
+- verifier que la liste se met a jour ;
+- verifier que les previews compilent.
 
 ## Telecharger une version precise
 
@@ -89,6 +116,7 @@ Chaque fin de TP est disponible avec un tag Git :
 - `tp6-final`
 - `tp7-final`
 - `tp8-final`
+- `tp9-final`
 
 Pour telecharger une version sans cloner le depot :
 
@@ -100,5 +128,5 @@ Pour telecharger une version sans cloner le depot :
 Pour le code final de ce TP, choisir :
 
 ```text
-tp8-final
+tp9-final
 ```
